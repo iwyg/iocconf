@@ -1,6 +1,6 @@
 # Configure Dependency injection with xml
 
-[![Build Status](https://travis-ci.org/iwyg/icoconf.png?branch=master)](https://travis-ci.org/iwyg/iocconf)
+[![Build Status](https://travis-ci.org/iwyg/iocconf.png?branch=master)](https://travis-ci.org/iwyg/iocconf)
 
 
 ## Installation

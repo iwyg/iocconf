@@ -3,17 +3,24 @@
 
 ## Installation
 
-Add thapp\xsltbridge as a requirement to composer.json:
+IocConf requires [XmlConf](https://github.com/iwyg/xmlconf) to work. 
+
+Add thapp/iocconf ans thapp/xmlconf as a requirement to composer.json:
 
 ```json
 {
     "require": {
+        "thapp/iocconf": "dev-master",
         "thapp/xmlconf": "dev-master"
     },
     "repositories": [
         {
         "type":"vcs",
         "url":"https://github.com/iwyg/iocconf"
+        },
+        {
+        "type":"vcs",
+        "url":"https://github.com/iwyg/xmlconf"
         }
     ]
 }

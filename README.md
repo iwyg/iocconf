@@ -13,7 +13,7 @@ Add thapp\xsltbridge as a requirement to composer.json:
     "repositories": [
         {
         "type":"vcs",
-        "url":"https://github.com/iwyg/xmlconf"
+        "url":"https://github.com/iwyg/iocconf"
         }
     ]
 }

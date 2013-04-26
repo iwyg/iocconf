@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns="http://getsymphony.com/schema/ioc"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://getsymphony.com/schema/ioc"
+  elementFormDefault="qualified">
+
+  <xs:element name="container" type="container"/>
+
+  <xs:complexType name="container"> 
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[Root element of the sections.]]>
+      </xs:documentation>
+    </xs:annotation>   
+    <xs:sequence>
+      <xs:element name="entities" type="entities" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="entities"> 
+    <xs:sequence>
+      <xs:element name="entity" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="entity"> 
+    <xs:sequence>
+      <xs:element name="call" type="call" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="argument"  type="argument" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="class" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="call"> 
+    <xs:sequence>
+      <xs:element name="argument" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="method" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="argument"> 
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="class" type="xs:string"/>
+  </xs:complexType>
+</xs:schema>

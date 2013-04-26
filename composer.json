@@ -1,0 +1,28 @@
+{
+    "name": "thapp/iocconf",
+    "description": "ioc container configuration using xml",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Appel",
+            "email": "mail@thomas-appel.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "thapp/xmlconf":"dev-master"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.7.2"
+    },
+    "repositories": [
+        {
+        "type":"vcs",
+        "url":"https://github.com/iwyg/xmlconf"
+        }
+    ],
+	"autoload": {
+		"psr-0": {"Thapp":"src/"},
+		"classmap":["tests/"]
+	}
+}

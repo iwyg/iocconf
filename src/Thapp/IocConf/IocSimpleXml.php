@@ -12,6 +12,7 @@
 namespace Thapp\IocConf;
 
 use \SimpleXMLElement;
+use Illuminate\Container\Container;
 use Thapp\XmlConf\SimpleXmlConfigInterface;
 
 /**
@@ -31,7 +32,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
      * parse
      *
      * @access public
-     * @return \Closure
+     * @return array
      */
     public function parse()
     {
@@ -49,7 +50,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
      *
      * @param \SimpleXMLElement $container
      * @access protected
-     * @return \SimpleXMLElement
+     * @return array|\SimpleXMLElement
      */
     protected function getEntites()
     {
@@ -76,12 +77,12 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
     /**
      * createResolver
      *
-     * @param mixed $entity
-     * @param mixed $attributes
+     * @param \SimpleXMLElement $entity
+     * @param \SimpleXMLElement $attributes
      * @access protected
-     * @return mixed
+     * @return array
      */
-    protected function createResolver($entity, $attributes)
+    protected function createResolver(\SimpleXMLElement $entity, $attributes)
     {
         $me        = $this;
         $id        = (string)$attributes->id;
@@ -93,29 +94,26 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
             'id'       => $id,
             'class'    => $class,
             'scope'    => (string)$attributes->scope,
-            'callback' => new SerializableClosure(function ($app) use ($id, $class, $arguments, $setters)
+            'callback' => new SerializableClosure(function (Container $app) use ($id, $class, $arguments, $setters)
             {
                 $args = array();
 
                 if (count($arguments) > 0) {
-
                     foreach ($arguments as $argument) {
-
                         $args[] = $argument($app);
                     }
                 }
 
+                // if no id is given, we cannot resolve the instance directly
+                // from the container. Instead, we create a new Instance.
                 if (0 === strlen($id)) {
-
                     $instance = new \ReflectionClass($class);
                     $instance = count($args) ? $instance->newInstanceArgs($args) : $instance->newInstance();
-
                 } else {
                     $instance = $app->make($class, $args);
                 }
 
                 if (count($setters) > 0) {
-
                     foreach ($setters as $setter) {
                         $setter($app, $instance);
                     }
@@ -147,10 +145,14 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
             $class = (string)$attributes->class;
 
 
-            $arguments[] = new SerializableClosure(function ($app) use ($id, $class)
-            {
-                return $app->make((0 === strlen($id) || $id === $class) ? $class : $id);
-            });
+            $arguments[] = new SerializableClosure(
+
+                function (Container $app) use ($id, $class)
+                {
+                    return $app->make((0 === strlen($id) || $id === $class) ? $class : $id);
+                }
+
+            );
         }
 
         return $arguments;
@@ -161,7 +163,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
      *
      * @param mixed $entity
      * @access protected
-     * @return mixed
+     * @return array
      */
     protected function getEntitySetters($entity)
     {
@@ -176,23 +178,17 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
             $class  = (string)$attributes->class;
             $method = (string)$attributes->method;
 
-            $setters[(string)$attributes->method] = new SerializableClosure(function ($app, $instance) use ($id, $arguments, $method)
-            {
-                $fn = current($arguments);
+            $setters[(string)$attributes->method] = new SerializableClosure(
 
-                return call_user_func_array(
-                    array($instance, $method),
-                    array($fn($app))
-                );
-            });
+                function (Container $app, $instance) use ($id, $arguments, $method)
+                {
+                    $fn = current($arguments);
+                    return call_user_func_array(array($instance, $method), array($fn($app)));
+                }
+
+            );
 
         }
-
         return $setters;
-    }
-
-    protected function parseEntityAttributes($attributes)
-    {
-
     }
 }

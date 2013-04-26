@@ -10,7 +10,7 @@
   <xs:complexType name="container"> 
     <xs:annotation>
       <xs:documentation>
-        <![CDATA[Root element of the sections.]]>
+        <![CDATA[Root element of the Ioc Container.]]>
       </xs:documentation>
     </xs:annotation>   
     <xs:sequence>

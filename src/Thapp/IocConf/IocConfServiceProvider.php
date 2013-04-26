@@ -58,7 +58,7 @@ class IocConfServiceProvider extends ServiceProvider
                     $this->app->bind($id, $callback);
                 break;
                 case 'shared':
-                    $this->app[$id] = $callback;
+                    $this->app[$id] = $this->app->share($callback);
                 break;
             }
         }

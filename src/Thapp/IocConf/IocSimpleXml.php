@@ -94,7 +94,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
             'id'       => $id,
             'class'    => $class,
             'scope'    => (string)$attributes->scope,
-            'callback' => new SerializableClosure(function (Container $app) use ($id, $class, $arguments, $setters)
+            'callback' => new SerializableClosure(function (\Illuminate\Container\Container $app) use ($id, $class, $arguments, $setters)
             {
                 $args = array();
 
@@ -147,7 +147,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
 
             $arguments[] = new SerializableClosure(
 
-                function (Container $app) use ($id, $class)
+                function (\Illuminate\Container\Container $app) use ($id, $class)
                 {
                     return $app->make((0 === strlen($id) || $id === $class) ? $class : $id);
                 }
@@ -180,7 +180,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
 
             $setters[(string)$attributes->method] = new SerializableClosure(
 
-                function (Container $app, $instance) use ($id, $arguments, $method)
+                function (\Illuminate\Container\Container $app, $instance) use ($id, $arguments, $method)
                 {
                     $fn = current($arguments);
                     return call_user_func_array(array($instance, $method), array($fn($app)));

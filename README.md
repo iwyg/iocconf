@@ -117,7 +117,7 @@ The conig xml would look like this
 
 #### xml
 
-Note: An entity node can have an id attribute but must have a class attribute,
+Note: An entity node can have an id attribute but must have a class and a scope attribute,
 An agument node must either have an id or class attribute.
 
 Possible entity scopes: 

@@ -25,42 +25,42 @@ use Illuminate\Container\Container;
 interface ResolverInterface
 {
     /**
-     * resolve
+     * resolve the callback data array
      *
      * @access public
-     * @return mixed
+     * @return array
      */
     public function resolve();
 
     /**
-     * executeCallback
+     * execute the classfactory callback
      *
-     * @param mixed $
+     * @param \Illuminate\Container\Container $app the IoC container
      * @access public
-     * @return mixed
+     * @return mixed normaly returns an object instance
      */
     public function executeCallback(Container $app);
 
     /**
-     * resolveArgument
+     * resolve required arguments
      *
-     * @param \Illuminate\Container\Container $app
-     * @param mixed $id
-     * @param mixed $class
+     * @param \Illuminate\Container\Container $app the IoC container
+     * @param string $id bound id
+     * @param string $class classname
      * @access public
      * @return mixed
      */
     public function resolveArgument(Container $app, $id, $class);
 
     /**
-     * resolveSetter
+     * resolve required setters
      *
-     * @param Container $app
-     * @param mixed $instance
-     * @param mixed $arguments
-     * @param mixed $method
+     * @param \Illuminate\Container\Container $app the IoC container
+     * @param object $instance the class instance
+     * @param array $arguments setter arguments
+     * @param string $method setter mathod name
      * @access public
-     * @return mixed
+     * @return void
      */
     public function resolveSetter(Container $app, $instance, $arguments, $method);
 

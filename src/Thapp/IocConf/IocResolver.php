@@ -47,8 +47,18 @@ class IocResolver implements ResolverInterface
      */
     protected $scope;
 
+    /**
+     * setters
+     *
+     * @var array
+     */
     protected $setters;
 
+    /**
+     * arguments
+     *
+     * @var array
+     */
     protected $arguments;
 
     /**
@@ -70,13 +80,13 @@ class IocResolver implements ResolverInterface
     }
 
     /**
-     * getEntityArguments
+     * get the arguments array from an entity node
      *
-     * @param mixed $entity
+     * @param \SimpleXMLElement $entity the entity node
      * @access protected
      * @return array
      */
-    protected function getEntityArguments($entity)
+    protected function getEntityArguments(\SimpleXMLElement $entity)
     {
         $arguments  = array();
 
@@ -94,13 +104,13 @@ class IocResolver implements ResolverInterface
     }
 
     /**
-     * getEntitySetters
+     * get the setters array from an entity node
      *
-     * @param mixed $entity
+     * @param \SimpleXMLElement $entity the entity node
      * @access protected
      * @return array
      */
-    protected function getEntitySetters($entity)
+    protected function getEntitySetters(\SimpleXMLElement $entity)
     {
         $setters = array();
 
@@ -113,10 +123,10 @@ class IocResolver implements ResolverInterface
     }
 
     /**
-     * resolve
+     * resolve the callback data array
      *
      * @access public
-     * @return mixed
+     * @return array
      */
     public function resolve()
     {
@@ -129,9 +139,9 @@ class IocResolver implements ResolverInterface
     }
 
     /**
-     * executeCallback
+     * execute the classfactory callback
      *
-     * @param \Illuminate\Container\Container $app
+     * @param \Illuminate\Container\Container $app the IoC container
      * @access public
      * @return mixed normaly returns an object instance
      */
@@ -163,8 +173,11 @@ class IocResolver implements ResolverInterface
     }
 
     /**
-     * resolveArguments
+     * resolve required arguments
      *
+     * @param \Illuminate\Container\Container $app the IoC container
+     * @param string $id bound id
+     * @param string $class classname
      * @access public
      * @return mixed
      */
@@ -174,14 +187,14 @@ class IocResolver implements ResolverInterface
     }
 
     /**
-     * resolveSetters
+     * resolve required setters
      *
-     * @param mixed $app
-     * @param mixed $instance
-     * @param mixed $arguments
-     * @param mixed $method
+     * @param \Illuminate\Container\Container $app the IoC container
+     * @param object $instance the class instance
+     * @param array $arguments setter arguments
+     * @param string $method setter mathod name
      * @access public
-     * @return mixed
+     * @return void
      */
     public function resolveSetter(Container $app, $instance, $arguments, $method)
     {

@@ -70,125 +70,14 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
 
         $id        = (string)$attributes->id;
         $class     = (string)$attributes->class;
+        $scope     = (string)$attributes->scope;
 
-        $result[0 === strlen($id) ? $class : $id] = $this->createResolver($entity, $attributes);
+        $attr      = compact(array('id', 'class', 'scope'), $id, $class, $scope);
+
+        //$result[0 === strlen($id) ? $class : $id] = $this->createResolver($entity, $attr);
+        $resolver = new IocResolver($entity, $attr);
+
+        $result[0 === strlen($id) ? $class : $id] = $resolver->resolve();
     }
 
-    /**
-     * createResolver
-     *
-     * @param \SimpleXMLElement $entity
-     * @param \SimpleXMLElement $attributes
-     * @access protected
-     * @return array
-     */
-    protected function createResolver(\SimpleXMLElement $entity, $attributes)
-    {
-        $me        = $this;
-        $id        = (string)$attributes->id;
-        $class     = (string)$attributes->class;
-        $setters   = $this->getEntitySetters($entity);
-        $arguments = $this->getEntityArguments($entity);
-
-        $result = array(
-            'id'       => $id,
-            'class'    => $class,
-            'scope'    => (string)$attributes->scope,
-            'callback' => new SerializableClosure(function (\Illuminate\Container\Container $app) use ($id, $class, $arguments, $setters)
-            {
-                $args = array();
-
-                if (count($arguments) > 0) {
-                    foreach ($arguments as $argument) {
-                        $args[] = $argument($app);
-                    }
-                }
-
-                // if no id is given, we cannot resolve the instance directly
-                // from the container. Instead, we create a new Instance.
-                if (0 === strlen($id)) {
-                    $instance = new \ReflectionClass($class);
-                    $instance = count($args) ? $instance->newInstanceArgs($args) : $instance->newInstance();
-                } else {
-                    $instance = $app->make($class, $args);
-                }
-
-                if (count($setters) > 0) {
-                    foreach ($setters as $setter) {
-                        $setter($app, $instance);
-                    }
-                }
-
-                return $instance;
-            })
-        );
-
-        return $result;
-    }
-
-    /**
-     * getEntityArguments
-     *
-     * @param mixed $entity
-     * @access protected
-     * @return array
-     */
-    protected function getEntityArguments($entity)
-    {
-        $arguments  = array();
-
-        foreach ($entity->argument as $argument) {
-
-            $attributes = $argument->attributes();
-
-            $id    = (string)$attributes->id;
-            $class = (string)$attributes->class;
-
-
-            $arguments[] = new SerializableClosure(
-
-                function (\Illuminate\Container\Container $app) use ($id, $class)
-                {
-                    return $app->make((0 === strlen($id) || $id === $class) ? $class : $id);
-                }
-
-            );
-        }
-
-        return $arguments;
-    }
-
-    /**
-     * getEntitySetters
-     *
-     * @param mixed $entity
-     * @access protected
-     * @return array
-     */
-    protected function getEntitySetters($entity)
-    {
-        $setters = array();
-
-        foreach ($entity->call as $call) {
-
-            $attributes = $call->attributes();
-            $arguments  = $this->getEntityArguments($call);
-
-            $id     = (string)$attributes->id;
-            $class  = (string)$attributes->class;
-            $method = (string)$attributes->method;
-
-            $setters[(string)$attributes->method] = new SerializableClosure(
-
-                function (\Illuminate\Container\Container $app, $instance) use ($id, $arguments, $method)
-                {
-                    $fn = current($arguments);
-                    return call_user_func_array(array($instance, $method), array($fn($app)));
-                }
-
-            );
-
-        }
-        return $setters;
-    }
 }

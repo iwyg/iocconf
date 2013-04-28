@@ -4,7 +4,6 @@ namespace Thapp\Tests\IocConf;
 
 use Mockery as m;
 use Thapp\IocConf\IocSimpleXml;
-use Thapp\IocConf\SerializableClosure;
 
 class IocSimpleXmlTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,8 +27,8 @@ class IocSimpleXmlTest extends \PHPUnit_Framework_TestCase
         $result = $xml->parse();
 
         $this->assertTrue(isset($result['acme.foo']));
-        $this->assertTrue(isset($result['acme.foo']['callback']));
-        $this->assertInstanceOf('Thapp\IocConf\SerializableClosure', $result['acme.foo']['callback']);
+        $this->assertTrue(isset($result['acme.foo']['resolver']));
+        $this->assertInstanceOf('Thapp\IocConf\IocResolver', $result['acme.foo']['resolver']);
     }
 
     /**
@@ -38,7 +37,7 @@ class IocSimpleXmlTest extends \PHPUnit_Framework_TestCase
      * @access public
      * @return mixed
      */
-    public function testCallbackShouldInvokeContainerMake()
+    public function testExecuteCallbackSouldCreateCorrectScope()
     {
         $mock = m::mock('Foo');
         $container = $this->getContainerMock(function (&$container) use ($mock) {
@@ -55,7 +54,7 @@ class IocSimpleXmlTest extends \PHPUnit_Framework_TestCase
             ');
 
         $result   = $xml->parse();
-        $resolved = $result['acme.foo']['callback']($container);
+        $resolved = $result['acme.foo']['resolver']->executeCallback($container);
 
         $this->assertSame($mock, $resolved);
 

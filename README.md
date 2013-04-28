@@ -17,19 +17,9 @@ Add thapp/iocconf ans thapp/xmlconf as a requirement to composer.json:
 ```json
 {
     "require": {
-        "thapp/iocconf": "dev-master",
-        "thapp/xmlconf": "dev-master"
-    },
-    "repositories": [
-        {
-        "type":"vcs",
-        "url":"https://github.com/iwyg/iocconf"
-        },
-        {
-        "type":"vcs",
-        "url":"https://github.com/iwyg/xmlconf"
-        }
-    ]
+        "thapp/iocconf": "1.0.*",
+        "thapp/xmlconf": "1.0.*"
+    }
 }
 ```
 

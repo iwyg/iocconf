@@ -10,17 +10,11 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "thapp/xmlconf":"dev-master"
+        "thapp/xmlconf":"1.0.*"
     },
     "require-dev": {
         "mockery/mockery": "0.7.2"
     },
-    "repositories": [
-        {
-        "type":"vcs",
-        "url":"https://github.com/iwyg/xmlconf"
-        }
-    ],
 	"autoload": {
 		"psr-0": {"Thapp":"src/"},
 		"classmap":["tests/"]

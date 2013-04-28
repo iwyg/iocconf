@@ -121,7 +121,6 @@ class IocResolverTest extends TestCase
      */
     public function testSetPropertyClass()
     {
-
         list ($resolver, $reflection) = $this->preparePropertyTest();
 
         $class = $reflection->getProperty('class');
@@ -148,21 +147,11 @@ class IocResolverTest extends TestCase
      */
     public function testSetPropertyScope()
     {
-
         list ($resolver, $reflection) = $this->preparePropertyTest();
-
 
         $scope = $reflection->getProperty('scope');
         $scope->setAccessible(true);
         $this->assertEquals('prototype', $scope->getValue($resolver));
-
-        $arguments = $reflection->getProperty('arguments');
-        $arguments->setAccessible(true);
-        $this->assertEquals(array(array('', 'Bar')), $arguments->getValue($resolver));
-
-        $setters = $reflection->getProperty('setters');
-        $setters->setAccessible(true);
-        $this->assertEquals(array('setFoo' =>  array(array('', 'Foo'))), $setters->getValue($resolver));
     }
 
     /**
@@ -170,7 +159,6 @@ class IocResolverTest extends TestCase
      */
     public function testSetPropertyArguments()
     {
-
         list ($resolver, $reflection) = $this->preparePropertyTest();
 
         $arguments = $reflection->getProperty('arguments');
@@ -183,7 +171,6 @@ class IocResolverTest extends TestCase
      */
     public function testSetPropertySetters()
     {
-
         list ($resolver, $reflection) = $this->preparePropertyTest();
 
         $setters = $reflection->getProperty('setters');

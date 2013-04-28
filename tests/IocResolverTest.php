@@ -78,7 +78,7 @@ class IocResolverTest extends TestCase
             'scope' => 'prototype',
         ));
 
-        $resolver->resolveSetter($container, $bar, array(array('', 'Foo')), 'setFoo');
+        $resolver->resolveSetter($container, $bar, 'setFoo', array(array('', 'Foo')));
         $this->assertSame($foo, $bar->getFoo());
     }
 

@@ -165,8 +165,8 @@ class IocResolver implements ResolverInterface
         }
 
         if (count($this->setters) > 0) {
-            foreach ($this->setters as $method => $setter) {
-                $args[] = $this->resolveSetter($app, $instance, $setter, $method);
+            foreach ($this->setters as $method => $arguments) {
+                $args[] = $this->resolveSetter($app, $instance, $method, $arguments);
             }
         }
         return $instance;
@@ -196,10 +196,9 @@ class IocResolver implements ResolverInterface
      * @access public
      * @return void
      */
-    public function resolveSetter(Container $app, $instance, $arguments, $method)
+    public function resolveSetter(Container $app, $instance, $method, $arguments)
     {
-        $id    = $arguments[0][0];
-        $class = $arguments[0][1];
+        list($id, $class) = current($arguments);
 
         $result = $this->resolveArgument($app, $id, $class);
         return call_user_func_array(array($instance, $method), array($result));

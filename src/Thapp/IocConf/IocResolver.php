@@ -47,6 +47,10 @@ class IocResolver implements ResolverInterface
      */
     protected $scope;
 
+    protected $setters;
+
+    protected $arguments;
+
     /**
      * __construct
      *
@@ -83,10 +87,7 @@ class IocResolver implements ResolverInterface
             $id    = (string)$attributes->id;
             $class = (string)$attributes->class;
 
-            $arguments[] = array(
-                array($this, 'resolveArgument'),
-                array($id, $class)
-            );
+            $arguments[] = array($id, $class);
         }
 
         return $arguments;
@@ -104,16 +105,9 @@ class IocResolver implements ResolverInterface
         $setters = array();
 
         foreach ($entity->call as $call) {
-
             $attributes = $call->attributes();
             $arguments  = $this->getEntityArguments($call);
-
-            $method = (string)$attributes->method;
-
-            $setters[(string)$attributes->method] = array(
-                array($this, 'resolveSetter'),
-                array($arguments, $method)
-            );
+            $setters[(string)$attributes->method] = $arguments;
         }
         return $setters;
     }
@@ -147,12 +141,7 @@ class IocResolver implements ResolverInterface
 
         if (count($this->arguments) > 0) {
             foreach ($this->arguments as $argument) {
-
-                $callback = array_shift($argument);
-
-                array_unshift($argument[0], $app);
-
-                $args[]   = call_user_func_array($callback, $argument[0]);
+                $args[] = $this->resolveArgument($app, $argument[0], $argument[1]);
             }
         }
 
@@ -162,18 +151,12 @@ class IocResolver implements ResolverInterface
             $instance = new \ReflectionClass($this->class);
             $instance = count($args) ? $instance->newInstanceArgs($args) : $instance->newInstance();
         } else {
-            $instance = $app->make($this->class, $args);
+            $instance = $app->make($this->class, count($args) ? $args : null);
         }
 
         if (count($this->setters) > 0) {
-            foreach ($this->setters as $setter) {
-
-                $callback = array_shift($setter);
-
-                array_unshift($setter[0], $instance);
-                array_unshift($setter[0], $app);
-
-                $args[] = call_user_func_array($callback, $setter[0]);
+            foreach ($this->setters as $method => $setter) {
+                $args[] = $this->resolveSetter($app, $instance, $setter, $method);
             }
         }
         return $instance;
@@ -202,11 +185,10 @@ class IocResolver implements ResolverInterface
      */
     public function resolveSetter(Container $app, $instance, $arguments, $method)
     {
-        $fn    = $arguments[0][0];
-        $id    = $arguments[0][1][0];
-        $class = $arguments[0][1][1];
+        $id    = $arguments[0][0];
+        $class = $arguments[0][1];
 
-        $result = call_user_func_array($fn, array($app, $id, $class));
+        $result = $this->resolveArgument($app, $id, $class);
         return call_user_func_array(array($instance, $method), array($result));
     }
 }

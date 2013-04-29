@@ -77,7 +77,7 @@ class FrontController extends BaseController
 {
 
     // ... setter method on your controller
-    public function setView(Illuminate\View\Environment $view)
+    public function setView(\Illuminate\View\Environment $view)
     {
         $this->view = $view;
     }

@@ -1,4 +1,4 @@
-# Pupulate and configure Laravel's IoC container with xml
+# Populate and configure Laravel's IoC container with xml
 
 [![Build Status](https://travis-ci.org/iwyg/iocconf.png?branch=master)](https://travis-ci.org/iwyg/iocconf)
 
@@ -71,13 +71,13 @@ Given you want to inject Laravel's view Object into a controller, the xml config
 
 namespace Acme;
 
-use BaseController;
+use \BaseController;
 
 class FrontController extends BaseController
 {
 
     // ... setter method on your controller
-    public function setView(Illuminate\View\Environment $view)
+    public function setView(\Illuminate\View\Environment $view)
     {
         $this->view = $view;
     }
@@ -92,7 +92,7 @@ The conig xml would look like this
 <container xmlns="http://getsymphony.com/schema/ioc">
 
   <entities>
-    <entity id="acme.frontcontroller" class="FrontController" scope="prototype"/>
+    <entity class="Acme\FrontController" scope="prototype"/>
         <!-- the controller has a setter method for setting the view object -->
         <call method="setView">
     		<argument id="view"/>

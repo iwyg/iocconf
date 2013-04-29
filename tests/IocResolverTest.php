@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This File is part of the Thapp\IocConf package
+ *
+ * (c) Thomas Appel <mail@thomas-appel.com>
+ *
+ * For full copyright and license information, please refer to the LICENSE file
+ * that was distributed with this package.
+ */
+
 namespace Thapp\Tests\IocConf;
 
 use Mockery as m;
@@ -41,11 +50,7 @@ class IocResolverTest extends TestCase
             </entity>
             ');
 
-        $resolver = new IocResolver($xml, array(
-            'id'    => 'acme.foo',
-            'class' => 'Foo',
-            'scope' => 'prototype',
-        ));
+        $resolver = $this->setUpResolver($xml);
 
         $this->assertSame($bar, $resolver->resolveArgument($container, '', 'Bar'));
     }
@@ -70,13 +75,9 @@ class IocResolverTest extends TestCase
                     <argument class="Foo"/>
                 </call>
             </entity>
-            ');
+        ');
 
-        $resolver = new IocResolver($xml, array(
-            'id'    => 'acme.foo',
-            'class' => 'Foo',
-            'scope' => 'prototype',
-        ));
+        $resolver = $this->setUpResolver($xml);
 
         $resolver->resolveSetter($container, $bar, 'setFoo', array(array('', 'Foo')));
         $this->assertSame($foo, $bar->getFoo());
@@ -106,11 +107,7 @@ class IocResolverTest extends TestCase
             </entity>
             ');
 
-        $resolver = new IocResolver($xml, array(
-            'id'    => 'acme.foo',
-            'class' => 'Foo',
-            'scope' => 'prototype',
-        ));
+        $resolver = $this->setUpResolver($xml);
 
         $this->assertEquals($foo, $resolver->executeCallback($container));
         $this->assertSame($baz, $foo->getBaz());
@@ -189,13 +186,26 @@ class IocResolverTest extends TestCase
             </entity>
             ');
 
-        $resolver = new IocResolver($xml, array(
+        $resolver = $this->setUpResolver($xml);
+
+        $reflection = new \ReflectionObject($resolver);
+        return array($resolver, $reflection);
+    }
+
+    /**
+     * setUpResolver
+     *
+     * @param mixed $xml
+     * @param array $attributes
+     * @access protected
+     * @return Thapp\IocConf\IocResolver
+     */
+    protected function setUpResolver($xml, array $attributes = null)
+    {
+        return new IocResolver($xml, !is_null($attributes) ? $attributes : array(
             'id'    => 'acme.foo',
             'class' => 'Foo',
             'scope' => 'prototype',
         ));
-
-        $reflection = new \ReflectionObject($resolver);
-        return array($resolver, $reflection);
     }
 }

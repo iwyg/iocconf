@@ -13,7 +13,6 @@ namespace Thapp\IocConf;
 
 use \SimpleXMLElement;
 use Illuminate\Container\Container;
-use Thapp\XmlConf\SimpleXmlConfigInterface;
 
 /**
  * Class: IocSimpleXml
@@ -26,7 +25,7 @@ use Thapp\XmlConf\SimpleXmlConfigInterface;
  * @author Thomas Appel <mail@thomas-appel.com>
  * @license MIT
  */
-class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
+class IocSimpleXml extends SimpleXMLElement implements IocSimpleXmlInterface
 {
     /**
      * parse
@@ -43,6 +42,34 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($attribute)
+    {
+        if (!is_null($this->attributes())) {
+            return $this->attributes()->get($attribute);
+        }
+
+        return $this->getAttributeValue($attribute);
+    }
+
+    /**
+     * getAttributeValue
+     *
+     * @param string $attribute
+     * @access protected
+     * @return string|float|int
+     */
+    protected function getAttributeValue($attribute)
+    {
+        $value = (string)$this->{$attribute};
+        if (is_numeric($value)) {
+            return false !== strpos($value, '.') ? floatval($value) : intval($value);
+        }
+        return $value;
     }
 
     /**
@@ -74,10 +101,7 @@ class IocSimpleXml extends SimpleXMLElement implements SimpleXmlConfigInterface
 
         $attr      = compact(array('id', 'class', 'scope'), $id, $class, $scope);
 
-        //$result[0 === strlen($id) ? $class : $id] = $this->createResolver($entity, $attr);
         $resolver = new IocResolver($entity, $attr);
-
         $result[0 === strlen($id) ? $class : $id] = $resolver->resolve();
     }
-
 }

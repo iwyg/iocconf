@@ -1,18 +1,48 @@
 <?php
 
+/**
+ * This File is part of the Thapp\IocConf package
+ *
+ * (c) Thomas Appel <mail@thomas-appel.com>
+ *
+ * For full copyright and license information, please refer to the LICENSE file
+ * that was distributed with this package.
+ */
+
 namespace Thapp\Tests\IocConf;
 
 use Mockery as m;
 
+/**
+ * Class: TestCase
+ *
+ * @uses \PHPUnit_Framework_TestCase
+ *
+ * @package
+ * @version
+ * @author Thomas Appel <mail@thomas-appel.com>
+ * @license MIT
+ */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
 
-
+    /**
+     * close Mockery
+     *
+     * @return void
+     */
     protected function tearDown()
     {
         m::close();
     }
 
+    /**
+     * load
+     *
+     * @param mixed $xml
+     * @access protected
+     * @return \Thapp\IocConf\IocSimpleXml
+     */
     protected function load($xml)
     {
         $dom = new \DOMDOcument;
@@ -21,6 +51,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return simplexml_import_dom($dom, 'Thapp\IocConf\IocSimpleXml');
     }
 
+    /**
+     * getContainerMock
+     *
+     * @param \Closure $callback
+     * @access protected
+     * @return \Illuminate\Container\Container
+     */
     protected function getContainerMock(\Closure $callback = null)
     {
         $container = m::mock('Application', '\Illuminate\Container\Container');

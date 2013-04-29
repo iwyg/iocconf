@@ -86,18 +86,12 @@ class IocResolver implements ResolverInterface
      * @access protected
      * @return array
      */
-    protected function getEntityArguments(\SimpleXMLElement $entity)
+    protected function getEntityArguments(\Thapp\XmlConf\SimpleXmlConfigInterface $entity)
     {
         $arguments  = array();
 
         foreach ($entity->argument as $argument) {
-
-            $attributes = $argument->attributes();
-
-            $id    = (string)$attributes->id;
-            $class = (string)$attributes->class;
-
-            $arguments[] = array($id, $class);
+            $arguments[] = array($argument->get('id'), $argument->get('class'));
         }
 
         return $arguments;
@@ -110,15 +104,15 @@ class IocResolver implements ResolverInterface
      * @access protected
      * @return array
      */
-    protected function getEntitySetters(\SimpleXMLElement $entity)
+    protected function getEntitySetters(\Thapp\XmlConf\SimpleXmlConfigInterface $entity)
     {
         $setters = array();
 
         foreach ($entity->call as $call) {
-            $attributes = $call->attributes();
             $arguments  = $this->getEntityArguments($call);
-            $setters[(string)$attributes->method] = $arguments;
+            $setters[$call->get('method')] = $arguments;
         }
+
         return $setters;
     }
 

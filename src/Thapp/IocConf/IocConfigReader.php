@@ -26,41 +26,4 @@ use Illuminate\Container\Container;
  */
 class IocConfigReader extends XmlConfigReader
 {
-    /**
-     * Illuminate\Container\Container
-     *
-     * @var mixed
-     */
-    protected $container;
-
-    /**
-     * setContainer
-     *
-     * @param Illuminate\Container\Container $container
-     * @access public
-     * @return void
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * load
-     *
-     * @param mixed $default
-     * @access public
-     * @return mixed
-     */
-    public function load($default = null)
-    {
-        if (file_exists($this->xmlfile)) {
-
-            $data = $this->parse();
-            //$this->cache->write($data);
-            return $data;
-        }
-
-        return $default;
-    }
 }

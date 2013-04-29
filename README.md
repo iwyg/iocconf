@@ -1,4 +1,4 @@
-# Pupulate and configure Laravel's IoC container with xml
+# Populate and configure Laravel's IoC container with xml
 
 [![Build Status](https://travis-ci.org/iwyg/iocconf.png?branch=master)](https://travis-ci.org/iwyg/iocconf)
 

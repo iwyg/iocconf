@@ -25,7 +25,6 @@ use Mockery as m;
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * close Mockery
      *
@@ -67,5 +66,25 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         return $container;
+    }
+
+    /**
+     * invokeProtectedMethod
+     *
+     * @param mixed $object
+     * @param mixed $method
+     * @param mixed $arguments
+     * @access protected
+     * @return mixed
+     */
+    protected function invokeProtectedMethod($object, $method, $arguments)
+    {
+        $reflection = new \ReflectionObject($object);
+        $method = $reflection->getMethod($method);
+
+        $method->setAccessible(true);
+        array_unshift($arguments, $object);
+
+        return call_user_func_array(array($method, 'invoke'), $arguments);
     }
 }

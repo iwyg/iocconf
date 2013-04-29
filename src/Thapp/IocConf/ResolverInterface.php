@@ -33,36 +33,10 @@ interface ResolverInterface
     public function resolve();
 
     /**
-     * execute the classfactory callback
+     * make
      *
-     * @param \Illuminate\Container\Container $app the IoC container
      * @access public
-     * @return mixed normaly returns an object instance
+     * @return \Closure
      */
-    public function executeCallback(Container $app);
-
-    /**
-     * resolve required arguments
-     *
-     * @param \Illuminate\Container\Container $app the IoC container
-     * @param string $id bound id
-     * @param string $class classname
-     * @access public
-     * @return mixed
-     */
-    public function resolveArgument(Container $app, $id, $class);
-
-    /**
-     * resolve required setters
-     *
-     * @param \Illuminate\Container\Container $app the IoC container
-     * @param object $instance the class instance
-     * @param array $arguments setter arguments
-     * @param string $method setter mathod name
-     * @access public
-     * @return void
-     */
-    public function resolveSetter(Container $app, $instance, $arguments, $method);
-
-
+    public function make();
 }

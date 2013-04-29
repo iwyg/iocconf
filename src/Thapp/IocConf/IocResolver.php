@@ -133,13 +133,29 @@ class IocResolver implements ResolverInterface
     }
 
     /**
+     * make
+     *
+     * @access public
+     * @return mixed
+     */
+    public function make()
+    {
+        $me = $this;
+
+        return function ($app) use ($me)
+        {
+            return $this->executeCallback($app);
+        };
+    }
+
+    /**
      * execute the classfactory callback
      *
      * @param \Illuminate\Container\Container $app the IoC container
-     * @access public
+     * @access protected
      * @return mixed normaly returns an object instance
      */
-    public function executeCallback(Container $app)
+    protected function executeCallback(Container $app)
     {
         $args = array();
 
@@ -172,10 +188,10 @@ class IocResolver implements ResolverInterface
      * @param \Illuminate\Container\Container $app the IoC container
      * @param string $id bound id
      * @param string $class classname
-     * @access public
+     * @access protected
      * @return mixed
      */
-    public function resolveArgument(Container $app, $id, $class)
+    protected function resolveArgument(Container $app, $id, $class)
     {
         return $app->make((0 === strlen($id) || $id === $class) ? $class : $id);
     }
@@ -187,14 +203,15 @@ class IocResolver implements ResolverInterface
      * @param object $instance the class instance
      * @param array $arguments setter arguments
      * @param string $method setter mathod name
-     * @access public
+     * @access protected
      * @return void
      */
-    public function resolveSetter(Container $app, $instance, $method, $arguments)
+    protected function resolveSetter(Container $app, $instance, $method, $arguments)
     {
         list($id, $class) = current($arguments);
 
         $result = $this->resolveArgument($app, $id, $class);
         return call_user_func_array(array($instance, $method), array($result));
     }
+
 }

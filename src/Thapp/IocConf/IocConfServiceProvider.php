@@ -49,10 +49,7 @@ class IocConfServiceProvider extends ServiceProvider
         foreach ($ioc->load(array()) as $id => $setup) {
 
             $resolver = $setup['resolver'];
-
-            $callback = function ($app) use ($resolver) {
-                return $resolver->executeCallback($app);
-            };
+            $callback = $resolver->make();
 
             switch ($setup['scope']) {
                 case 'singleton':

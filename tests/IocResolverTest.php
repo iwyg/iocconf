@@ -52,7 +52,8 @@ class IocResolverTest extends TestCase
 
         $resolver = $this->setUpResolver($xml);
 
-        $this->assertSame($bar, $resolver->resolveArgument($container, '', 'Bar'));
+        $result = $this->invokeProtectedMethod($resolver, 'resolveArgument', array($container, '', 'Bar'));
+        $this->assertSame($bar, $result);
     }
 
     /**
@@ -79,7 +80,8 @@ class IocResolverTest extends TestCase
 
         $resolver = $this->setUpResolver($xml);
 
-        $resolver->resolveSetter($container, $bar, 'setFoo', array(array('', 'Foo')));
+        $this->invokeProtectedMethod($resolver, 'resolveSetter', array($container, $bar, 'setFoo', array(array('', 'Foo'))));
+
         $this->assertSame($foo, $bar->getFoo());
     }
 
@@ -109,7 +111,8 @@ class IocResolverTest extends TestCase
 
         $resolver = $this->setUpResolver($xml);
 
-        $this->assertEquals($foo, $resolver->executeCallback($container));
+        $result = $this->invokeProtectedMethod($resolver, 'executeCallback', array($container));
+        $this->assertEquals($foo, $result);
         $this->assertSame($baz, $foo->getBaz());
     }
 

@@ -107,7 +107,7 @@ class IocSimpleXmlTest extends TestCase
 
         $xml      = $this->getXml();
         $result   = $xml->parse();
-        $resolved = $result['acme.foo']['resolver']->executeCallback($container);
+        $resolved = $this->invokeProtectedMethod($result['acme.foo']['resolver'], 'executeCallback', array($container));
 
         $this->assertSame($mock, $resolved);
 

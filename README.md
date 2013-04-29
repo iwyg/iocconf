@@ -86,7 +86,7 @@ class FrontController extends BaseController
 
 ```
 
-The conig xml would look like this
+The config xml would look like this
 
 ```xml
 <container xmlns="http://getsymphony.com/schema/ioc">

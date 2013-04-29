@@ -14,28 +14,31 @@
       </xs:documentation>
     </xs:annotation>   
     <xs:sequence>
-      <xs:element name="entities" type="entities" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="entities" type="entities" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="entities"> 
     <xs:sequence>
-      <xs:element name="entity" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="entity" type="entity" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="entity"> 
-    <xs:sequence>
-      <xs:element name="call" type="call" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="argument"  type="argument" minOccurs="0" maxOccurs="unbounded"/>
+  <xs:complexType name="entity" mixed="true"> 
+
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="argument" type="argument"/>
+      <xs:element name="call" type="call"/>
     </xs:sequence>
+
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="class" type="xs:string" use="required"/>
+    <xs:attribute name="scope" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="call"> 
     <xs:sequence>
-      <xs:element name="argument" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="argument" type="argument" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="method" type="xs:string" use="required"/>
   </xs:complexType>

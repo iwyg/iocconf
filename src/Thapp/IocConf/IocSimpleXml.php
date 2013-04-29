@@ -66,9 +66,11 @@ class IocSimpleXml extends SimpleXMLElement implements IocSimpleXmlInterface
     protected function getAttributeValue($attribute)
     {
         $value = (string)$this->{$attribute};
+
         if (is_numeric($value)) {
             return false !== strpos($value, '.') ? floatval($value) : intval($value);
         }
+
         return $value;
     }
 

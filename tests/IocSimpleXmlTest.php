@@ -92,7 +92,7 @@ class IocSimpleXmlTest extends TestCase
         $xml    = $this->getXml();
         $result = $xml->parse();
 
-        $this->assertInstanceOf('Thapp\IocConf\IocResolver', $result['acme.foo']['resolver']);
+        $this->assertInstanceOf('Thapp\IocConf\ResolverInterface', $result['acme.foo']['resolver']);
     }
 
     /**
@@ -107,7 +107,7 @@ class IocSimpleXmlTest extends TestCase
 
         $xml      = $this->getXml();
         $result   = $xml->parse();
-        $resolved = $this->invokeProtectedMethod($result['acme.foo']['resolver'], 'executeCallback', array($container));
+        $resolved = $this->invokeProtectedMethod($result['acme.foo']['resolver'], 'runFactory', array($container));
 
         $this->assertSame($mock, $resolved);
 

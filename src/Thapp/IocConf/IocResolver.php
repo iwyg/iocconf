@@ -155,7 +155,7 @@ class IocResolver implements ResolverInterface
      * @access protected
      * @return mixed normaly returns an object instance
      */
-    protected function executeCallback(Container $app)
+    protected function runFactory(Container $app)
     {
         $args = array();
 

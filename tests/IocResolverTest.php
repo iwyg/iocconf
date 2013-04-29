@@ -111,7 +111,7 @@ class IocResolverTest extends TestCase
 
         $resolver = $this->setUpResolver($xml);
 
-        $result = $this->invokeProtectedMethod($resolver, 'executeCallback', array($container));
+        $result = $this->invokeProtectedMethod($resolver, 'runFactory', array($container));
         $this->assertEquals($foo, $result);
         $this->assertSame($baz, $foo->getBaz());
     }

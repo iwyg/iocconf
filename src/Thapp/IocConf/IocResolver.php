@@ -144,7 +144,7 @@ class IocResolver implements ResolverInterface
 
         return function ($app) use ($me)
         {
-            return $this->executeCallback($app);
+            return $this->runFactory($app);
         };
     }
 

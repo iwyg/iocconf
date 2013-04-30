@@ -49,8 +49,8 @@ class IocSimpleXml extends SimpleXMLElement implements IocSimpleXmlInterface
      */
     public function get($attribute)
     {
-        if (!is_null($this->attributes())) {
-            return $this->attributes()->get($attribute);
+        if (!is_null($attributes = $this->attributes())) {
+            return $attributes->get($attribute);
         }
 
         return $this->getAttributeValue($attribute);

@@ -142,7 +142,7 @@ class IocResolver implements ResolverInterface
     {
         $me = $this;
 
-        return function ($app) use ($me)
+        return function (Container $app) use ($me)
         {
             return $this->runFactory($app);
         };

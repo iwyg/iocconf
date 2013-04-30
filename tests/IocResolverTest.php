@@ -37,6 +37,35 @@ class IocResolverTest extends TestCase
     /**
      * @test
      */
+    public function testMakeShouldReturnClosure()
+    {
+        $xml = $this->load('<entity class="Foo" scope="prototype" />');
+        $resolver = $this->setUpResolver($xml);
+        $callback = $resolver->make();
+
+        $this->assertInstanceOf('\Closure', $callback);
+    }
+
+    /**
+     * @test
+     */
+    public function testMakeClosureShouldReciveAContainerArgument()
+    {
+        $xml = $this->load('<entity class="Foo" scope="prototype" />');
+
+        $resolver = $this->setUpResolver($xml);
+
+        $callback = $resolver->make();
+
+        $fn = new \ReflectionFunction($callback);
+        $arg = current($fn->getParameters());
+
+        $this->assertEquals($arg->getClass()->getName(), 'Illuminate\Container\Container');
+    }
+
+    /**
+     * @test
+     */
     public function testResolveArgument()
     {
         $bar = m::mock('Bar');
